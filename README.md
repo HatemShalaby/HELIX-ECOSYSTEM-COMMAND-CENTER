@@ -5,6 +5,16 @@ A production-minded AI automation and learning workspace built for self-directed
 
 This repository contains a local command engine, a learning system that generates lessons and quizzes, an interactive browser-based quiz experience, and a headless Playwright test harness for automated validation.
 
+## About
+This project is designed to demonstrate an engineering-grade local AI platform with explicit operational controls, secure content generation, and human-guided learning workflows.
+
+It is intended for reviewers who want to see:
+- a clear separation between automation logic and learning content,
+- secure answer handling in browser-based quizzes,
+- local model discovery for Ollama-managed models,
+- path-centralized configuration, and
+- explicit save/discard policies for learner data.
+
 ## What’s inside
 - `00_command_center/`
   - `engine.py` — JSON-driven command engine with resource-aware execution and structured execution logging.
