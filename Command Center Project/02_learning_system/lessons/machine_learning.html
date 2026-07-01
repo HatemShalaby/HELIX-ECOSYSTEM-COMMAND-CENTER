@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Learning System: Machine Learning</title>
+    <style>
+        body { background-color: #121212; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; line-height: 1.6; padding: 40px; margin: 0; }
+        .focus-container { max-width: 800px; margin: auto; }
+        .card { background: #1e1e1e; padding: 40px; border-radius: 16px; border: 1px solid #333; margin-bottom: 20px; }
+        h1 { color: #00e676; margin-top: 0; }
+        h2 { color: #00b0ff; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        code { background: #000; padding: 2px 6px; color: #ffeb3b; font-family: 'Consolas', monospace; border-radius: 4px; }
+        pre code { display: block; padding: 15px; overflow-x: auto; }
+        textarea { width: 100%; height: 120px; background: #2c2c2c; color: white; border: 1px solid #444; border-radius: 8px; padding: 15px; box-sizing: border-box; font-size: 14px; resize: vertical; }
+        button { background: #00e676; color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 14px; transition: background 0.2s; }
+        button:hover { background: #00c853; }
+        button:disabled { background: #555; color: #888; cursor: not-allowed; }
+        .success-msg { display: none; color: #00e676; margin-top: 10px; font-weight: bold; }
+        .quiz-section { border-top: 2px dashed #444; padding-top: 20px; }
+        .quiz-card { background: #1a237e; border: 1px solid #3f51b5; padding: 25px; border-radius: 12px; margin-top: 20px; }
+        .feedback { background: #263238; border-left: 5px solid #00e676; padding: 15px; margin-top: 15px; border-radius: 4px; display: none; }
+        .progress { font-size: 14px; color: #b0bec5; font-weight: bold; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="focus-container">
+        <!-- Lesson Content Card -->
+        <div class="card lesson-content">
+            <h1>Production‑Grade Machine Learning Lesson</h1>
+<p><strong>Goal:</strong> Equip engineers and data scientists with the fundamentals, tooling, and best practices needed to design, train, evaluate, and deploy machine‑learning models in a real‑world environment.  </p>
+<hr />
+<h2>1. Overview &amp; Learning Objectives</h2>
+<table>
+<thead>
+<tr>
+<th>Objective</th>
+<th>What you’ll be able to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Understand core ML concepts</strong></td>
+<td>Explain supervised/unsupervised learning, bias‑variance trade‑off, overfitting, and why production models differ from research prototypes.</td>
+</tr>
+<tr>
+<td><strong>Build reproducible data pipelines</strong></td>
+<td>Use version control, data‑versioning tools, and automated preprocessing.</td>
+</tr>
+<tr>
+<td><strong>Select &amp; train appropriate models</strong></td>
+<td>Choose algorithms for tabular, image, text, or time‑series data; apply hyper‑parameter tuning and cross‑validation.</td>
+</tr>
+<tr>
+<td><strong>Evaluate models rigorously</strong></td>
+<td>Apply proper train/validation/test splits, appropriate metrics, and cross‑validation strategies.</td>
+</tr>
+<tr>
+<td><strong>Package &amp; serve models</strong></td>
+<td>Serialize models (ONNX/Joblib), containerize with Docker, and expose inference via a lightweight API (FastAPI).</td>
+</tr>
+<tr>
+<td><strong>Apply production best practices</strong></td>
+<td>Implement CI/CD, monitoring, logging, and ethical safeguards for ML systems.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>2. Core Machine‑Learning Concepts</h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Why it matters in production</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Supervised vs. Unsupervised</strong></td>
+<td>Determines the loss function, evaluation metric, and data labeling requirements.</td>
+</tr>
+<tr>
+<td><strong>Bias‑Variance Trade‑off</strong></td>
+<td>Guides model complexity; over‑fitting leads to poor generalization on new data.</td>
+</tr>
+<tr>
+<td><strong>Regularization (L1/L2, dropout, early stopping)</strong></td>
+<td>Controls variance without sacrificing predictive power.</td>
+</tr>
+<tr>
+<td><strong>Feature Engineering &amp; Scaling</strong></td>
+<td>Directly impacts convergence speed and final performance.</td>
+</tr>
+<tr>
+<td><strong>Model Interpretability</strong></td>
+<td>Enables debugging, regulatory compliance, and stakeholder trust.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>3. Data Engineering Foundations</h2>
+<ol>
+<li><strong>Acquisition</strong> – Pull data from relational DBs, APIs, or streaming sources.  </li>
+<li><strong>Cleaning</strong> – Handle missing values, outliers, and schema drift.  </li>
+<li><strong>Feature Store</strong> – Centralize engineered features for training &amp; inference (e.g., Feast, Hopsworks).  </li>
+<li><strong>Versioning</strong> – Use DVC, Git LFS, or MLflow to lock data snapshots.  </li>
+</ol>
+<pre><code class="language-python"># Example: Load a CSV with pandas &amp; basic sanity checks
+import pandas as pd
+
+df = pd.read_csv('sales_data.csv')
+print(df.head())
+print(df.info())
+</code></pre>
+<hr />
+<h2>4. Model Selection &amp; Training</h2>
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Typical Use‑Case</th>
+<th>Key Hyper‑parameters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Linear / Logistic Regression</strong></td>
+<td>Baseline, high‑dimensional sparse data</td>
+<td>Regularization strength (C), activation function</td>
+</tr>
+<tr>
+<td><strong>Tree‑Based (RandomForest, XGBoost, LightGBM)</strong></td>
+<td>Tabular classification/regression</td>
+<td>Number of trees, max depth, learning rate</td>
+</tr>
+<tr>
+<td><strong>Neural Networks (Keras / PyTorch)</strong></td>
+<td>Unstructured data, sequential patterns</td>
+<td>Hidden units, dropout, batch size, optimizer</td>
+</tr>
+<tr>
+<td><strong>Clustering (K‑means, DBSCAN)</strong></td>
+<td>Unsupervised segmentation</td>
+<td>Number of clusters, distance metric</td>
+</tr>
+</tbody>
+</table>
+<h3>4.1 Scikit‑learn Pipeline Example</h3>
+<pre><code class="language-python">from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error, r2_score
+
+# 1️⃣ Define features &amp; target
+X = df[['age', 'income', 'square_feet']]
+y = df['price']
+
+# 2️⃣ Train/validation split (80/20) – keep a hold‑out test set for final evaluation
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
+
+# 3️⃣ Column transformer: scale numeric features, one‑hot encode categoricals
+numeric_features = ['age', 'income']
+categorical_features = ['city']
+
+preprocess = ColumnTransformer(
+    transformers=[
+        ('num', StandardScaler(), numeric_features),
+        ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_features)
+    ]
+)
+
+# 4️⃣ Model + pipeline
+model = Pipeline(steps=[
+    ('preprocess', preprocess),
+    ('rf', RandomForestRegressor(
+        n_estimators=200,
+        max_depth=None,
+        random_state=42
+    ))
+])
+
+# 5️⃣ Fit
+model.fit(X_train, y_train)
+
+# 6️⃣ Predict &amp; evaluate
+preds = model.predict(X_test)
+print(f'MAE: {mean_absolute_error(y_test, preds):.2f}')
+print(f'R²: {r2_score(y_test, preds):.4f}')
+</code></pre>
+<h3>4.2 Hyper‑parameter Tuning with Optuna</h3>
+<pre><code class="language-python">import optuna
+
+def objective(trial):
+    params = {
+        'n_estimators': trial.suggest_int('n_estimators', 100, 500),
+        'max_depth': trial.suggest_int('max_depth', 3, 20),
+        'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.3)
+    }
+    clf = RandomForestRegressor(**params, random_state=42)
+    clf.fit(X_train, y_train)
+    preds = clf.predict(X_val)
+    return mean_absolute_error(y_val, preds)
+
+study = optuna.create_study(direction='minimize')
+study.optimize(objective, n_trials=30)
+print(f'Best trial: {study.best_params}')
+</code></pre>
+<hr />
+<h2>5. Model Serialization &amp; Experiment Tracking</h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Primary Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Joblib / Pickle</strong></td>
+<td>Quick serialization of scikit‑learn models (binary).</td>
+</tr>
+<tr>
+<td><strong>ONNX</strong></td>
+<td>Cross‑framework model export; enables inference on CPU/GPU with TensorFlow Lite, OpenVINO, etc.</td>
+</tr>
+<tr>
+<td><strong>MLflow</strong></td>
+<td>Centralized tracking of runs, parameters, artifacts, and model versioning.</td>
+</tr>
+<tr>
+<td><strong>DVC</strong></td>
+<td>Git‑compatible data versioning (large blobs).</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python"># Save a scikit‑learn pipeline to the local DVC index
+import dvc
+
+@dvc.command()
+def save_model():
+    import joblib
+    dvc.add('model.pkl', model)          # joblib is preferred for sklearn models
+    print(&quot;Model saved to DVC index.&quot;)
+
+# Later, in CI/CD:
+# dvc checkout --recursive model.pkl
+</code></pre>
+<hr />
+<h2>6. Containerization &amp; Deployment</h2>
+<h3>6.1 Minimal Dockerfile (FastAPI + ONNX)</h3>
+<pre><code class="language-dockerfile"># ---- Build stage -------------------------------------------------
+FROM python:3.11-slim
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# ---- Runtime stage ------------------------------------------------
+CMD [&quot;uvicorn&quot;, &quot;main:app&quot;, &quot;--host&quot;, &quot;0.0.0.0&quot;, &quot;--port&quot;, &quot;8080&quot;]
+</code></pre>
+<p><code>requirements.txt</code></p>
+<pre><code>fastapi
+uvicorn[standard]
+torch   # or tensorflow, onnxruntime, etc.
+joblib
+mlflow
+</code></pre>
+<h3>6.2 FastAPI Inference Service</h3>
+<pre><code class="language-python"># main.py
+from fastapi import FastAPI
+import joblib
+
+app = FastAPI()
+model = joblib.load(&quot;model.pkl&quot;)          # path to saved scikit‑learn model
+
+@app.get(&quot;/predict&quot;)
+def predict(price: float):
+    # Expect a JSON payload {&quot;price&quot;: 350000}
+    features = [{&quot;price&quot;: price}]
+    pred = model.predict(features)
+    return {&quot;predicted_price&quot;: round(pred[0], 2)}
+</code></pre>
+<p>Build &amp; run:</p>
+<pre><code class="language-bash">docker build -t ml-service .
+docker run -p 8080:8080 -v $(pwd):/app ml-service
+</code></pre>
+<hr />
+<h2>7. Production Best Practices</h2>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Recommended Practice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CI/CD</strong></td>
+<td>Automate test suites (unit, integration) and model validation on each PR; use GitHub Actions or GitLab CI.</td>
+</tr>
+<tr>
+<td><strong>Observability</strong></td>
+<td>Export structured logs (JSON), metrics (Prometheus), and traces (OpenTelemetry).</td>
+</tr>
+<tr>
+<td><strong>Scaling</strong></td>
+<td>Deploy inference containers behind a load balancer; use Kubernetes HPA for auto‑scaling based on CPU/memory or request latency.</td>
+</tr>
+<tr>
+<td><strong>Security</strong></td>
+<td>Enforce TLS, validate input schemas, and apply RBAC on the API gateway.</td>
+</tr>
+<tr>
+<td><strong>Data Drift &amp; Monitoring</strong></td>
+<td>Set up drift detectors (e.g., KolibriAI, Evidently AI) that alert when feature distributions diverge.</td>
+</tr>
+<tr>
+<td><strong>Model Retraining</strong></td>
+<td>Schedule periodic retraining pipelines (e.g., weekly) using DVC + Airflow/Kubeflow Pipelines.</td>
+</tr>
+<tr>
+<td><strong>Ethics &amp; Fairness</strong></td>
+<td>Conduct bias audits, document model cards, and provide explainability (SHAP/LIME).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>8. End‑to‑End Mini‑Project: House‑Price Prediction</h2>
+<ol>
+<li><strong>Data ingestion</strong> – Load <code>housing.csv</code> from S3 or a local bucket.  </li>
+<li><strong>Preprocessing</strong> – Impute missing values, encode categorical city names, scale numeric features.  </li>
+<li><strong>Model training</strong> – Use the pipeline above with Optuna hyper‑parameter tuning.  </li>
+<li><strong>Export</strong> – Save the final model to <code>model.pkl</code> and push it to an artifact repository (e.g., S3).  </li>
+<li><strong>Containerize</strong> – Build a Docker image that runs the FastAPI service.  </li>
+<li><strong>Deploy</strong> – Deploy on a cloud VM or managed Kubernetes cluster; expose <code>/predict</code> endpoint.  </li>
+</ol>
+<p><em>(Full script would be ~150 lines; the snippets above illustrate the critical steps.)</em></p>
+<hr />
+<h2>9. Quiz – Test Your Understanding</h2>
+<p><strong>Q1.</strong> <em>Explain the difference between bias and variance in a model, and why both need to be balanced for production models.</em><br />
+A. <strong>Bias</strong> is the error from erroneous assumptions in the learning algorithm; high bias leads to under‑fitting. <strong>Variance</strong> is the error from sensitivity to small fluctuations in training data; high variance leads to over‑fitting. Production models require a balance—often achieved by regularization, cross‑validation, or ensembling.</p>
+<hr />
+<p><strong>Q2.</strong> <em>Which serialization format is most suitable for exporting a scikit‑learn pipeline that includes preprocessing steps and hyper‑parameter tuning results?</em><br />
+A. <strong>ONNX</strong> – enables inference on multiple runtimes (TensorFlow, PyTorch, OpenVINO) while preserving scikit‑learn model state; ideal when you need cross‑framework compatibility.</p>
+<hr />
+<p><strong>Q3.</strong> <em>Describe two key practices for monitoring a deployed ML service and how they help maintain model quality.</em><br />
+A. <strong>Logging &amp; Metrics:</strong> Capture inference latency, error rates, and feature distribution statistics in a centralized observability platform (e.g., Prometheus + Grafana). This provides early detection of performance degradation or data drift.<br />
+<strong>Model Drift Alerts:</strong> Use statistical tests (e.g., Kolmogorov‑Smirnov) on incoming feature distributions; trigger automated retraining pipelines when significant divergence is observed.</p>
+<hr />
+<p><em>Answer key:</em> Q1 – as above; Q2 – ONNX; Q3 – detailed description of logging/metrics and drift detection.  </p>
+<hr />
+<h3>🎓 Takeaway</h3>
+<p>Machine learning in production is <strong>more than just training a model</strong>—it’s about building robust pipelines, ensuring reproducibility, delivering models that can be scaled safely, and continuously monitoring them. By mastering the concepts, tools, and practices outlined above, you’re equipped to move from notebook experiments to reliable, enterprise‑grade AI services.  </p>
+<p>Happy modeling! 🚀</p>
+<h2>Quiz</h2>
+<ul>
+<li><strong>Q1:</strong> Explain the difference between bias and variance in a model, and discuss how both need to be balanced to achieve good performance in production environments.  </li>
+<li><strong>Q2:</strong> Which serialization format is most suitable for exporting a scikit‑learn pipeline that includes preprocessing steps and hyper‑parameter tuning results, and what are the advantages of using it over other formats?  </li>
+<li><strong>Q3:</strong> Describe two specific practices for monitoring a deployed machine‑learning service and explain how each practice helps maintain model quality over time.</li>
+</ul>
+        </div>
+        
+        <!-- Interactive Quiz Card -->
+        <div class="card quiz-section" id="interactive-quiz-container">
+            <h2>Interactive Quiz</h2>
+            <div class="quiz-card">
+                <div class="progress" id="quiz-progress">Question 1 of ...</div>
+                <h3 id="current-question-text">Loading question...</h3>
+                <textarea id="ans" placeholder="Type your detailed response here..."></textarea>
+                <div>
+                    <button id="submitBtn" onclick="submitAnswer()">Submit Answer</button>
+                    <button id="nextBtn" onclick="nextQuestion()" style="display: none; background: #00b0ff; color: #000;">Next Question</button>
+                </div>
+                <p id="msg" class="success-msg">✓ Evaluation received and logged.</p>
+                <div class="feedback" id="feedback-area">
+                    <strong>Tutor Evaluation:</strong>
+                    <p id="evaluation-text"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Track quiz state
+        let questions = [];
+        let currentIndex = 0;
+        let answersLogged = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            parseQuizQuestions();
+            displayQuestion();
+        });
+
+        function parseQuizQuestions() {
+            // Parse questions from the rendered Markdown
+            // Find all list items inside the list following the 'Quiz' header
+            const headings = Array.from(document.querySelectorAll('h2, h3'));
+            const quizHeading = headings.find(h => h.textContent.trim().toLowerCase() === 'quiz');
+            
+            if (quizHeading) {
+                // Hide the static quiz list inside the lesson content card to avoid duplicates
+                let sibling = quizHeading.nextElementSibling;
+                while (sibling) {
+                    if (sibling.tagName === 'OL' || sibling.tagName === 'UL') {
+                        const listItems = Array.from(sibling.querySelectorAll('li'));
+                        questions = listItems.map(li => {
+                            // Remove internal sub-lists like answers if they were generated
+                            let qText = li.innerHTML.split('<ul')[0].split('<ol')[0].replace(/<[^>]*>/g, '').trim();
+                            // Strip leading question numbers
+                            qText = qText.replace(/^\d+\.\s*/, '');
+                            return qText;
+                        });
+                        sibling.style.display = 'none'; // Hide raw static list
+                        break;
+                    }
+                    sibling = sibling.nextElementSibling;
+                }
+                quizHeading.style.display = 'none'; // Hide raw static header
+            }
+            
+            // If no questions found via parsing, use a fallback list
+            if (questions.length === 0) {
+                questions = [
+                    "Explain the primary technical architecture of Machine Learning.",
+                    "What are the main resource constraints of this concept?",
+                    "How would you implement this concept efficiently in production?"
+                ];
+            }
+        }
+
+        function displayQuestion() {
+            if (currentIndex < questions.length) {
+                document.getElementById('quiz-progress').textContent = `Question ${currentIndex + 1} of ${questions.length}`;
+                document.getElementById('current-question-text').textContent = questions[currentIndex];
+                document.getElementById('ans').value = '';
+                document.getElementById('ans').disabled = false;
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('feedback-area').style.display = 'none';
+                document.getElementById('msg').style.display = 'none';
+            } else {
+                // Quiz completed
+                document.getElementById('interactive-quiz-container').innerHTML = `
+                    <h2>Interactive Quiz Complete!</h2>
+                    <div class="quiz-card" style="background: #1b5e20; border-color: #4caf50;">
+                        <h3>🎉 Well done!</h3>
+                        <p>You have successfully completed the quiz session for <strong>Machine Learning</strong>.</p>
+                        <p>All evaluations have been successfully compiled and saved to learning records.</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function submitAnswer() {
+            const answerVal = document.getElementById('ans').value.trim();
+            if (!answerVal) {
+                alert("Please write an answer before submitting.");
+                return;
+            }
+            
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            document.getElementById('ans').disabled = true;
+            
+            const questionText = questions[currentIndex];
+            
+            try {
+                const response = await fetch('http://localhost:5000/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        topic: "Machine Learning",
+                        question: questionText,
+                        content: answerVal,
+                        question_index: currentIndex + 1,
+                        total_questions: questions.length
+                    })
+                });
+                
+                if (response.ok) {
+                    const resData = await response.json();
+                    document.getElementById('msg').style.display = 'block';
+                    document.getElementById('evaluation-text').textContent = resData.evaluation || 'No details provided';
+                    document.getElementById('feedback-area').style.display = 'block';
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+                } else {
+                    alert("Submission failed. Server returned error.");
+                    btn.disabled = false;
+                    document.getElementById('ans').disabled = false;
+                }
+            } catch (e) {
+                console.error(e);
+                alert("Backend server not responding. Ensure orchestrator has started the feedback handler.");
+                btn.disabled = false;
+                document.getElementById('ans').disabled = false;
+            }
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            displayQuestion();
+        }
+    </script>
+</body>
+</html>
