@@ -13,3 +13,6 @@ __pycache__/
 # OS-specific files
 .DS_Store
 Thumbs.db
+
+# Personal raw content not part of the repository
+Command Center Project/Raw/Context_personal/
