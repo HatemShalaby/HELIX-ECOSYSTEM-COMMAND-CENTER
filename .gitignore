@@ -16,3 +16,9 @@ Thumbs.db
 
 # Personal raw content not part of the repository
 Command Center Project/Raw/Context_personal/
+
+# Local editor and runtime artifacts
+.vscode/
+Command Center Project/.vscode/
+Command Center Project/01_personal_context/Personal_context_info.md
+Command Center Project/06_memory/command_center_log.json
