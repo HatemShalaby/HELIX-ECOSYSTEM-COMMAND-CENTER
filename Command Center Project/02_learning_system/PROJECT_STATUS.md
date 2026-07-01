@@ -1,86 +1,66 @@
-# Project Status — Helix Ecosystem
-**Last Updated:** 2026-06-26  
-**Status: ALL 8 CODE FIXES COMPLETE — System clean and operational**
+﻿# Project Status — Helix Ecosystem
+**Last Updated:** 2026-07-01  
+**State:** Active development with a functioning learning pipeline and command execution core.
 
 ---
 
-## Learning System — Fix Sweep Complete
+## Current Health Summary
+The Helix Ecosystem is a functional local AI automation workspace with a secured learning experience and a resource-aware command engine.
 
-All critical bugs identified in the 2026-06-26 audit have been resolved.  
-The system is now clean, dynamic, and human-in-the-loop compliant.
+Key system behaviors are implemented and verified, including lesson generation, quiz rendering, server-side answer evaluation, explicit save/discard semantics, and local model discovery.
 
-### Fixes Applied
+## What is working
+- ✅ Learning sessions can generate Markdown lessons and web-ready HTML.
+- ✅ The quiz UI strips answer keys and keeps grading logic on the backend.
+- ✅ The Flask feedback service evaluates answers in RAM and saves records only after `/save_session`.
+- ✅ `path_config.py` centralizes filesystem paths for all browser-engine modules.
+- ✅ Headless Playwright validation (`test_integration.py`) confirms browser integration and environment connectivity.
+- ✅ Local Ollama model discovery is established through `model_registry.py`.
 
-| Fix | File | Change | Status |
-|-----|------|--------|--------|
-| 1 | `education_engine.py` | Added `grade_answer()` with strict rubric | ✅ Done |
-| 2 | `model_registry.py` | Removed duplicate `get_model()`, removed all hardcoded model names | ✅ Done |
-| 3 | `path_config.py` | Created — single source of truth for all project paths | ✅ Done |
-| 4 | `feedback_handler.py` | Rewritten — `/submit` grades in RAM only; `/save_session` and `/discard_session` gate all disk writes | ✅ Done |
-| 5 | `quiz_generator.py` | Separated questions from answers; `_quiz_answers` dict holds answers server-side only | ✅ Done |
-| 6 | `renderer.py` | Answer sections stripped before HTML render; JS fetches questions from `/api/questions` API | ✅ Done |
-| 7 | `orchestrator.py`, `quiz_automator.py`, `cleanup_env.py`, `education_engine.py` | All hardcoded paths replaced with `path_config` imports | ✅ Done |
-| 8 | `education_engine.py` → `grade_answer()` | Strict scoring rule embedded in grading system prompt | ✅ Done (included in Fix 1) |
+## Active modules
 
----
+| Module | File | Status |
+|--------|------|--------|
+| Command Center Engine | `00_command_center/engine.py` | Operational — sequential payload runner with memory guard |
+| Learning Orchestrator | `02_learning_system/browser_engine/orchestrator.py` | Operational — coordinates lesson, quiz, HTML rendering, and feedback server |
+| Lesson Generator | `02_learning_system/browser_engine/education_engine.py` | Operational — creates Markdown lesson content via local model inference |
+| Quiz Processor | `02_learning_system/browser_engine/quiz_generator.py` | Operational — sanitizes questions and stores correct answers server-side |
+| Feedback Handler | `02_learning_system/browser_engine/feedback_handler.py` | Operational — grades answers and manages save/discard flows |
+| HTML Renderer | `02_learning_system/browser_engine/renderer.py` | Operational — produces interactive quiz pages without answer leakage |
+| Model Registry | `02_learning_system/browser_engine/model_registry.py` | Operational — selects the best available local model for each role |
+| Path Config | `02_learning_system/browser_engine/path_config.py` | Operational — single source of truth for all repo paths |
+| Playwright Test | `02_learning_system/browser_engine/test_integration.py` | Operational — validates browser connectivity and writes a pass record |
 
-## Architecture — Current Clean State
+## API endpoints
 
-### Non-Negotiables (All Enforced)
-- ✅ No hardcoded model names anywhere in source
-- ✅ No hardcoded absolute paths — `path_config.py` is the single authority
-- ✅ No disk writes without explicit human consent (`/save_session` gate)
-- ✅ No answer leakage — correct answers never reach the client browser
-- ✅ Dynamic model discovery via Ollama REST API at runtime
-- ✅ Sequential resource isolation — LLM and Playwright never overlap
+| Endpoint | Method | Role |
+|----------|--------|------|
+| `/submit` | POST | Grade quiz answers in RAM |
+| `/save_session` | POST | Persist session records to `learning-records/` |
+| `/discard_session` | POST | Clear unsaved session state |
+| `/api/questions` | GET | Deliver question text only, never answers |
 
-### Active Modules
+## Notes on current design
+- Lesson generation and browser automation are intentionally sequential to avoid concurrent VRAM/RAM pressure.
+- The HTML renderer strips answer key content before producing the quiz page.
+- The feedback server writes data only after explicit user approval.
+- The command engine persists execution history to `06_memory/command_center_log.json`.
 
-| Module | File | State |
-|--------|------|-------|
-| Command Center Engine | `engine.py` | ✅ Operational — tests pass, log confirmed |
-| Lesson Generator | `education_engine.py` | ✅ Operational |
-| Quiz Generator | `quiz_generator.py` | ✅ Clean — answers server-side only |
-| Grader | `education_engine.grade_answer()` | ✅ Strict rubric enforced |
-| Feedback Handler | `feedback_handler.py` | ✅ Human-in-loop gate active |
-| HTML Renderer | `renderer.py` | ✅ Answer-clean output |
-| Orchestrator | `orchestrator.py` | ✅ Human mode + auto-test mode |
-| Model Registry | `model_registry.py` | ✅ Dynamic discovery, no hardcoding |
-| Path Config | `path_config.py` | ✅ Single path authority |
-| Browser Integration Test | `test_integration.py` | ✅ Path hardcode removed |
+## Next engineering priorities
+1. **Add `model_config.json`** — make model preferences configurable without code edits.
+2. **Connect metacognitive logging** — surface saved quiz results into the central analytics workflow.
+3. **Add packaging/requirements** — create `requirements.txt` and local environment bootstrap scripts.
+4. **Consolidate CLI** — expose both command engine and learning engine from a single entrypoint.
 
-### Flask API Endpoints
+## Recommended validation
+```powershell
+python "Command Center Project\02_learning_system\browser_engine\orchestrator.py" "Machine Learning"
+python "Command Center Project\02_learning_system\browser_engine\orchestrator.py" "Machine Learning" --test
+python "Command Center Project\02_learning_system\browser_engine\test_integration.py"
+```
 
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| `/submit` | POST | Grade answer, hold result in RAM |
-| `/save_session` | POST | Write session to disk (human-triggered) |
-| `/discard_session` | POST | Clear RAM, write nothing |
-| `/api/questions` | GET | Return question text only (no answers) |
-
----
-
-## Command Center Engine
-
-- `engine.py` — processes JSON payloads, sequential execution, memory-guarded
-- `test_engine.py` — pytest suite, all passing
-- `command_center_log.json` — execution log confirmed populated
-
----
-
-## Next Priorities
-
-1. **End-to-end live test** — run `orchestrator.py "Python Basics"` in human mode, complete quiz, verify `/save_session` writes correctly
-2. **`model_config.json`** — create role-to-model mapping file so model preferences are editable without touching source code
-3. **Metacognitive loop** — wire quiz scores from `metacognitive_log.json` back into orchestrator for adaptive difficulty
-4. **Helix OPS intake pipeline** — next major module
-
----
-
-## Environment Reference
-
-- **OS:** Windows, Dev Drive
-- **Runtime:** `.venv` in `browser_engine/`
-- **Model Server:** Ollama on `localhost:11434`
-- **Feedback Server:** Flask on `localhost:5000` (started by orchestrator)
-- **Path Authority:** `browser_engine/path_config.py`
+## Environment reference
+- Windows local development
+- `python` runtime with Flask, Playwright, and Ollama
+- Local Ollama daemon expected on `localhost:11434`
+- `feedback_handler.py` runs at `http://localhost:5000`
