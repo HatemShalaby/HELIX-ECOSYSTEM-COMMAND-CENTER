@@ -1,3 +1,4 @@
+![Python package](https://github.com/HatemShalaby/HELIX-ECOSYSTEM-COMMAND-CENTER/actions/workflows/python-package.yml/badge.svg)
 # Helix Ecosystem — Command Center Project
 
 ## Overview
