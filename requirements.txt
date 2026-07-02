@@ -1,0 +1,6 @@
+﻿flask
+flask-cors
+playwright
+markdown
+ollama
+psutil
