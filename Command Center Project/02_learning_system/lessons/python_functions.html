@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Learning System: Python functions</title>
+    <style>
+        body { background-color: #121212; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; line-height: 1.6; padding: 40px; margin: 0; }
+        .focus-container { max-width: 800px; margin: auto; }
+        .card { background: #1e1e1e; padding: 40px; border-radius: 16px; border: 1px solid #333; margin-bottom: 20px; }
+        h1 { color: #00e676; margin-top: 0; }
+        h2 { color: #00b0ff; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        code { background: #000; padding: 2px 6px; color: #ffeb3b; font-family: 'Consolas', monospace; border-radius: 4px; }
+        pre code { display: block; padding: 15px; overflow-x: auto; }
+        textarea { width: 100%; height: 120px; background: #2c2c2c; color: white; border: 1px solid #444; border-radius: 8px; padding: 15px; box-sizing: border-box; font-size: 14px; resize: vertical; }
+        button { background: #00e676; color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 14px; transition: background 0.2s; }
+        button:hover { background: #00c853; }
+        button:disabled { background: #555; color: #888; cursor: not-allowed; }
+        .success-msg { display: none; color: #00e676; margin-top: 10px; font-weight: bold; }
+        .quiz-section { border-top: 2px dashed #444; padding-top: 20px; }
+        .quiz-card { background: #1a237e; border: 1px solid #3f51b5; padding: 25px; border-radius: 12px; margin-top: 20px; }
+        .feedback { background: #263238; border-left: 5px solid #00e676; padding: 15px; margin-top: 15px; border-radius: 4px; display: none; }
+        .progress { font-size: 14px; color: #b0bec5; font-weight: bold; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="focus-container">
+        <!-- Lesson Content Card -->
+        <div class="card lesson-content">
+            <h1>Python Functions</h1>
+<h2>Introduction</h2>
+<p>A function is a piece of reusable code that executes when called from somewhere else in the program, or can be invoked from other functions or directly from main script/module. </p>
+<p>The most basic form of a function definition takes three arguments:
+- The <code>def</code> keyword which introduces the function definition.
+- Function name to uniquely identify it within the module.
+- An optional pair of parentheses for positional arguments.</p>
+<h2>Key Concepts</h2>
+<ol>
+<li>
+<p><strong>Defining Functions</strong> - We use the <code>def</code> keyword followed by the function's name and a colon to define functions in Python. The statements inside the function are indented. </p>
+<p><code>python
+def greet(name):
+    print("Hello, " + name)</code>
+2. <strong>Arguments</strong> - Function arguments are used to pass data into a function. Arguments are specified after the function name, inside the parentheses. You can add as many arguments as you want, just separate them with a comma. 
+3. <strong>Return Statement</strong> - A return statement is used to exit a function and go back to where it was called. We can send any type of object through a return statement (be it integer, string etc.) And we can also pass no arguments or multiple arguments. Here's an example:
+<code>python
+def add_numbers(x, y):
+    return x + y</code>
+4. <strong>Scope</strong> - Scope determines the visibility of variables and functions in the program. The local variable has a scope limited to where it is defined. Global variable can be read from anywhere in the program. 
+5. <strong>Lambda Functions</strong> - A lambda function is an anonymous function that is defined with the <code>lambda</code> keyword, instead of the usual <code>def</code> keyword. It is useful for simple functions and cannot include statements like assignments or multiple expressions.
+<code>python
+add = lambda x, y: x + y</code></p>
+<h2>Practical Examples</h2>
+<p>Let's define a function to calculate factorial of a number. </p>
+</li>
+</ol>
+<pre><code class="language-python">def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n * factorial(n-1)
+print(factorial(5)) # Outputs 120
+</code></pre>
+<p>Now, let's define a function to calculate the area of a rectangle.</p>
+<pre><code class="language-python">def area_of_rectangle(length, width):
+    return length * width
+print(area_of_rectangle(4,7)) # Outputs 28
+</code></pre>
+<h2>Quiz</h2>
+<ol>
+<li>What is the keyword used in Python to define functions?</li>
+<li>a) def b) func c) function d) fn</li>
+</ol>
+<p>Correct Answer: c) function</p>
+<ol>
+<li>Which of these statements about Python's functions are true?</li>
+<li>a) Functions can be nested within other functions.</li>
+<li>b) Function arguments must have default values.</li>
+<li>c) All functions return a value by default if not specified otherwise.</li>
+<li>d) The keyword 'return' is used to define the end of the function.</li>
+</ol>
+<p>Correct Answers: 
+- a) Functions can be nested within other functions. (True)
+- b) Function arguments must have default values. (False, argument without default value needs to appear after those with defaults.)
+- c) All functions return a value by default if not specified otherwise. (True)
+- d) The keyword 'return' is used to define the end of the function. (False, it exits a function but does not define its outcome in python unless stated so)</p>
+<ol>
+<li>What happens when you try to call a function that hasn't been defined?</li>
+<li>a) A syntax error occurs</li>
+<li>b) The program crashes or terminates</li>
+<li>c) Nothing special, the function is simply ignored </li>
+<li>d) None of the above</li>
+</ol>
+<p>Correct Answer: a) A syntax error occurs.</p>
+        </div>
+        
+        <!-- Interactive Quiz Card -->
+        <div class="card quiz-section" id="interactive-quiz-container">
+            <h2>Interactive Quiz</h2>
+            <div class="quiz-card">
+                <div class="progress" id="quiz-progress">Question 1 of ...</div>
+                <h3 id="current-question-text">Loading question...</h3>
+                <textarea id="ans" placeholder="Type your detailed response here..."></textarea>
+                <div>
+                    <button id="submitBtn" onclick="submitAnswer()">Submit Answer</button>
+                    <button id="nextBtn" onclick="nextQuestion()" style="display: none; background: #00b0ff; color: #000;">Next Question</button>
+                </div>
+                <p id="msg" class="success-msg">✓ Evaluation received and logged.</p>
+                <div class="feedback" id="feedback-area">
+                    <strong>Tutor Evaluation:</strong>
+                    <p id="evaluation-text"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Track quiz state
+        let questions = [];
+        let currentIndex = 0;
+        let answersLogged = [];
+        const quizTopic = "Python functions";
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            await loadQuizQuestions();
+            displayQuestion();
+        });
+
+        async function loadQuizQuestions() {
+            const response = await fetch(`http://localhost:5000/api/questions?topic=${encodeURIComponent(quizTopic)}`);
+            const data = await response.json();
+            questions = Array.isArray(data.questions) ? data.questions : [];
+        }
+
+        function displayQuestion() {
+            if (currentIndex < questions.length) {
+                document.getElementById('quiz-progress').textContent = `Question ${currentIndex + 1} of ${questions.length}`;
+                document.getElementById('current-question-text').textContent = questions[currentIndex];
+                document.getElementById('ans').value = '';
+                document.getElementById('ans').disabled = false;
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('feedback-area').style.display = 'none';
+                document.getElementById('msg').style.display = 'none';
+            } else {
+                // Quiz completed
+                document.getElementById('interactive-quiz-container').innerHTML = `
+                    <h2>Interactive Quiz Complete!</h2>
+                    <div class="quiz-card" style="background: #1b5e20; border-color: #4caf50;">
+                        <h3>🎉 Well done!</h3>
+                        <p>You have successfully completed the quiz session for <strong>Python functions</strong>.</p>
+                        <p>All evaluations have been successfully compiled and saved to learning records.</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function submitAnswer() {
+            const answerVal = document.getElementById('ans').value.trim();
+            if (!answerVal) {
+                alert("Please write an answer before submitting.");
+                return;
+            }
+            
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            document.getElementById('ans').disabled = true;
+            
+            const questionText = questions[currentIndex];
+            
+            try {
+                const response = await fetch('http://localhost:5000/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        topic: "Python functions",
+                        question: questionText,
+                        content: answerVal,
+                        question_index: currentIndex + 1,
+                        total_questions: questions.length
+                    })
+                });
+                
+                if (response.ok) {
+                    const resData = await response.json();
+                    document.getElementById('msg').style.display = 'block';
+                    document.getElementById('evaluation-text').textContent = resData.evaluation || 'No details provided';
+                    document.getElementById('feedback-area').style.display = 'block';
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+                } else {
+                    alert("Submission failed. Server returned error.");
+                    btn.disabled = false;
+                    document.getElementById('ans').disabled = false;
+                }
+            } catch (e) {
+                console.error(e);
+                alert("Backend server not responding. Ensure orchestrator has started the feedback handler.");
+                btn.disabled = false;
+                document.getElementById('ans').disabled = false;
+            }
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            displayQuestion();
+        }
+    </script>
+</body>
+</html>
